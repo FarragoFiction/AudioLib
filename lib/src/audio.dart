@@ -14,6 +14,7 @@ class Audio {
     static bool canPlayMP3 = false;
     static bool canPlayOgg = false;
     static String extension;
+    static AudioFormat format;
 
     String path;
 
@@ -46,8 +47,10 @@ class Audio {
 
             if (canPlayOgg) {
                 extension = "ogg";
+                format = AudioFormats.oggFormat;
             } else if (canPlayMP3) {
                 extension = "mp3";
+                format = AudioFormats.mp3Format;
             } else {
                 throw Exception("Browser does not support ogg or mp3, somehow?");
             }
@@ -82,7 +85,7 @@ class Audio {
     // Playback
     // ######################################################################################################################
 
-    Future<AudioBuffer> load(String sound) => Loader.getResource("$path/$sound.$extension");
+    Future<AudioBuffer> load(String sound) => Loader.getResource("$path/$sound.$extension", format: format);
 
     Future<AudioBufferSourceNode> iPlay(String sound, String channel, {double pitchVar = 0.0, bool loop = false}) async {
         if (channels.containsKey(channel)) {
