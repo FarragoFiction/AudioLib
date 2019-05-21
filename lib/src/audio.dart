@@ -66,8 +66,9 @@ class Audio {
 
     Audio._(String this.path) {
         this.ctx = new AudioContext();
-        this.volumeNode = new GainNode(ctx);
+        this.volumeNode = new GainNode(ctx)..gain.value=1.0;
         this.volumeParam = volumeNode.gain;
+        this.volumeNode.connectNode(ctx.destination);
     }
 
     AudioChannel iCreateChannel(String name, [double defaultVolume = 1.0]) {
@@ -75,8 +76,10 @@ class Audio {
             throw Exception("Audio channel already exists!");
         }
 
-        channels[name] = new AudioChannel(name, this, defaultVolume);
-        return channels[name];
+        final AudioChannel channel = new AudioChannel(name, this, defaultVolume);
+        channel.volumeNode.connectNode(volumeNode);
+        channels[name] = channel;
+        return channel;
     }
 
     static AudioChannel createChannel(String name, [double defaultVolume = 1.0]) => SYSTEM.iCreateChannel(name, defaultVolume);
@@ -85,16 +88,21 @@ class Audio {
     // Playback
     // ######################################################################################################################
 
-    Future<AudioBuffer> load(String sound) => Loader.getResource("$path/$sound.$extension", format: format);
+    Future<AudioBuffer> load(String sound) {
+        log.debug("Load sound: $sound");
+        return Loader.getResource("$path/$sound.$extension", format: format);
+    }
 
     Future<AudioBufferSourceNode> iPlay(String sound, String channel, {double pitchVar = 0.0, bool loop = false}) async {
+        log.debug("test");
         if (channels.containsKey(channel)) {
             return channels[channel].play(sound, pitchVar: pitchVar, loop: loop);
         }
+        log.debug("Playback failed, channel $channel does not exist!");
         return null;
     }
 
-    static Future<AudioBufferSourceNode> play(String sound, String channel, {double pitchVar, bool loop = false}) => SYSTEM.iPlay(sound, channel, pitchVar: pitchVar, loop: loop);
+    static Future<AudioBufferSourceNode> play(String sound, String channel, {double pitchVar = 0.0, bool loop = false}) => SYSTEM.iPlay(sound, channel, pitchVar: pitchVar, loop: loop);
 
     // ######################################################################################################################
     // Utility
