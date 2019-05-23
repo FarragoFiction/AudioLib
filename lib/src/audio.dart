@@ -88,7 +88,7 @@ class Audio {
     // Playback
     // ######################################################################################################################
 
-    Future<AudioBuffer> load(String sound) {
+    Future<AudioBuffer> load(String sound) async {
         log.debug("Load sound: $sound");
         return Loader.getResource("$path/$sound.$extension", format: format);
     }
@@ -102,7 +102,7 @@ class Audio {
         return null;
     }
 
-    static Future<AudioBufferSourceNode> play(String sound, String channel, {double pitchVar = 0.0, bool loop = false}) => SYSTEM.iPlay(sound, channel, pitchVar: pitchVar, loop: loop);
+    static Future<AudioBufferSourceNode> play(String sound, String channel, {double pitchVar = 0.0, bool loop = false}) async => SYSTEM.iPlay(sound, channel, pitchVar: pitchVar, loop: loop);
 
     // ######################################################################################################################
     // Utility

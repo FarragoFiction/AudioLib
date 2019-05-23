@@ -6,13 +6,17 @@ void main() {
     bool started = false;
 
 
-    querySelector("#test").onClick.listen((Event e) {
+    querySelector("#test").onClick.listen((Event e) async {
         if (!started) {
             started = true;
             new Audio("sounds");
             Audio.createChannel("test");
         }
-        Audio.play("toaster", "test");
+        try {
+            await Audio.play("nottoaster", "test");
+        } on ProgressEvent catch(e) {
+            print(e);
+        }
         print("boop?");
     });
 }

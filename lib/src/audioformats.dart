@@ -30,7 +30,7 @@ abstract class AudioFormats {
 
 abstract class AudioFormat extends BinaryFileFormat<AudioBuffer> {
     @override
-    Future<AudioBuffer> read(ByteBuffer input) async =>  Audio.SYSTEM.ctx.decodeAudioData(input);
+    Future<AudioBuffer> read(ByteBuffer input) async => Audio.SYSTEM.ctx.decodeAudioData(input);
 
     @override
     Future<ByteBuffer> write(AudioBuffer data) => throw Exception("Audio saving not yet implemented");
