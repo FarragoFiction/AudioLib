@@ -13,6 +13,7 @@ class Playlist {
 
     Iterator<String> _iterator;
     bool _playing = false;
+    bool loop = false;
 
     Playlist(Iterable<String> this.soundNames) {
         _iterator = soundNames.iterator;
@@ -21,8 +22,10 @@ class Playlist {
     Future<void> play() async {
         if (!_playing) {
             final bool iter = _iterator.moveNext();
-            if (!iter) {
-                _iterator = soundNames.iterator..moveNext();
+            if (loop) {
+                if (!iter) {
+                    _iterator = soundNames.iterator..moveNext();
+                }
             }
 
             final String name = _iterator.current;
@@ -30,9 +33,14 @@ class Playlist {
             currentSound = await _makeBufferSource(name);
             currentSound.connectNode(output);
             _playing = true;
-            currentSound.onEnded.listen((Event e) { if (_playing) { play();}});
+            if (iter || loop) {
+                currentSound.onEnded.listen((Event e) {
+                    if (_playing) {
+                        play();
+                    }
+                });
+            }
             currentSound.start(0);
-
 
         } else {
             stop();

@@ -18,7 +18,7 @@ void main() {
             print(e);
         }*/
 
-        Playlist testlist = new Playlist(<String>["tone","toaster"]);
+        Playlist testlist = new Playlist(<String>["tone","toaster"])..loop = true;
         testlist.output.connectNode(Audio.SYSTEM.channels["test"].volumeNode);
         testlist.play();
 
