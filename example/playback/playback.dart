@@ -10,13 +10,20 @@ void main() {
         if (!started) {
             started = true;
             new Audio("sounds");
-            Audio.createChannel("test");
+            Audio.createChannel("test", 0.25);
         }
-        try {
+        /*try {
             await Audio.play("nottoaster", "test");
         } on ProgressEvent catch(e) {
             print(e);
-        }
+        }*/
+
+        Playlist testlist = new Playlist(<String>["tone","toaster"]);
+        testlist.output.connectNode(Audio.SYSTEM.channels["test"].volumeNode);
+        testlist.play();
+
+        //(await Audio.play("tone", "test")).loop=true;
+
         print("boop?");
     });
 }
