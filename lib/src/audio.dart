@@ -34,7 +34,7 @@ class Audio {
     // Init
     // ######################################################################################################################
 
-    factory Audio(String path) {
+    factory Audio([String path]) {
         if (SYSTEM == null) {
             // initialise the audio file formats *first*
             AudioFormats.init();
@@ -56,7 +56,7 @@ class Audio {
             }
 
             // instantiate audio system
-            SYSTEM = new Audio._(path);
+            SYSTEM = new Audio._(path == null || path.isEmpty ? "" : "$path/");
         } else {
             log.warn("Constructor invoked when audio system already exists, returning instance");
         }
@@ -90,7 +90,7 @@ class Audio {
 
     Future<AudioBuffer> load(String sound) async {
         log.debug("Load sound: $sound");
-        return Loader.getResource("$path/$sound.$extension", format: format);
+        return Loader.getResource("$path$sound.$extension", format: format);
     }
 
     Future<AudioBufferSourceNode> iPlay(String sound, String channel, {double pitchVar = 0.0, bool loop = false}) async {
