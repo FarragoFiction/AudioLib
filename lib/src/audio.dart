@@ -93,16 +93,16 @@ class Audio {
         return Loader.getResource("$path$sound.$extension", format: format);
     }
 
-    Future<AudioBufferSourceNode> iPlay(String sound, String channel, {double pitchVar = 0.0, bool loop = false}) async {
+    Future<AudioBufferSourceNode> iPlay(String sound, String channel, {double pitchVar = 0.0, double basePitch = 1.0, bool loop = false}) async {
         log.debug("test");
         if (channels.containsKey(channel)) {
-            return channels[channel].play(sound, pitchVar: pitchVar, loop: loop);
+            return channels[channel].play(sound, pitchVar: pitchVar, basePitch: basePitch, loop: loop);
         }
         log.debug("Playback failed, channel $channel does not exist!");
         return null;
     }
 
-    static Future<AudioBufferSourceNode> play(String sound, String channel, {double pitchVar = 0.0, bool loop = false}) async => SYSTEM.iPlay(sound, channel, pitchVar: pitchVar, loop: loop);
+    static Future<AudioBufferSourceNode> play(String sound, String channel, {double pitchVar = 0.0, double basePitch = 1.0, bool loop = false}) async => SYSTEM.iPlay(sound, channel, pitchVar: pitchVar, basePitch: basePitch, loop: loop);
 
     // ######################################################################################################################
     // Utility
@@ -147,7 +147,7 @@ class AudioChannel {
         this.volume = defaultVolume;
     }
 
-    Future<AudioBufferSourceNode> play(String sound, {double pitchVar = 0.0, bool loop = false}) async {
+    Future<AudioBufferSourceNode> play(String sound, {double pitchVar = 0.0, double basePitch = 1.0, bool loop = false}) async {
 
         final AudioBuffer buffer = await system.load(sound);
 
@@ -167,6 +167,8 @@ class AudioChannel {
                 node.playbackRate.value = 1.0 / (1.0 + variance);
             }
         }
+
+        node.playbackRate.value *= basePitch;
 
         node.start(0);
 
