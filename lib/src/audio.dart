@@ -177,5 +177,15 @@ class AudioChannel {
 }
 
 abstract class AudioEffect {
-    double value;
+    num value;
+}
+
+class AudioParamWrapper implements AudioEffect {
+    AudioParam param;
+    @override
+    num get value => param.value;
+    @override
+    set value(num v) => param.value = v;
+
+    AudioParamWrapper(AudioParam this.param);
 }
