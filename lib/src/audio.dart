@@ -110,10 +110,8 @@ class Audio {
 
     MediaElementAudioSourceNode nodeFromElement(AudioElement element) => ctx.createMediaElementSource(element);
 
-    static InputElement slider(dynamic param, [double min = 0.0, double max = 1.0, double increment = 0.01]) {
-        if (!(param is AudioParam || param is AudioEffect )) {
-            throw Exception("Unsupported type for Audio.slider, should be an AudioParam or AudioEffect");
-        }
+    static InputElement slider(dynamic audioParamORAudioEffect, [double min = 0.0, double max = 1.0, double increment = 0.01]) {
+        final AudioEffect param = validateParamInput(audioParamORAudioEffect);
 
         final InputElement s = new RangeInputElement()
             ..min = min.toString()
@@ -129,6 +127,16 @@ class Audio {
         });
 
         return s;
+    }
+
+    static AudioEffect validateParamInput(dynamic audioParamORAudioEffect) {
+        if (audioParamORAudioEffect is AudioEffect) {
+            return audioParamORAudioEffect;
+        } else if (audioParamORAudioEffect is AudioParam) {
+            return new AudioParamWrapper(audioParamORAudioEffect);
+        } else {
+            throw Exception("Unsupported audio parameter type, should be an AudioParam or AudioEffect");
+        }
     }
 }
 
