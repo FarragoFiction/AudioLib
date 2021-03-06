@@ -10,11 +10,11 @@ import "audio.dart";
 abstract class AudioFormats {
     static bool _init = false;
 
-    static AudioFormat mp3Format;
-    static AudioFormat oggFormat;
+    static late AudioFormat mp3Format;
+    static late AudioFormat oggFormat;
 
-    static StreamedAudioFormat streamedMp3Format;
-    static StreamedAudioFormat streamedOggFormat;
+    static late StreamedAudioFormat streamedMp3Format;
+    static late StreamedAudioFormat streamedOggFormat;
 
     static void init() {
         if (_init) { return; }
@@ -41,7 +41,7 @@ class MP3Format extends AudioFormat {
     String mimeType() => "audio/mpeg";
 
     @override
-    String header() => null;
+    String header() => "";
 }
 
 class OggFormat extends AudioFormat {
@@ -49,7 +49,7 @@ class OggFormat extends AudioFormat {
     String mimeType() => "audio/ogg";
 
     @override
-    String header() => null;
+    String header() => "";
 }
 
 // streamed versions, good for music and stuff where exact timings aren't 100% necessary

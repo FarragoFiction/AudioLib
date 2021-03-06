@@ -6,7 +6,7 @@ void main() {
     bool started = false;
 
 
-    querySelector("#test").onClick.listen((Event e) async {
+    querySelector("#test")!.onClick.listen((Event e) async {
         if (!started) {
             started = true;
             new Audio("sounds");
@@ -19,7 +19,7 @@ void main() {
         }*/
 
         Playlist testlist = new Playlist(<String>["tone","toaster"])..loop = true;
-        testlist.output.connectNode(Audio.SYSTEM.channels["test"].volumeNode);
+        testlist.output.connectNode(Audio.SYSTEM.channels["test"]!.volumeNode);
         testlist.play();
 
         //(await Audio.play("tone", "test")).loop=true;

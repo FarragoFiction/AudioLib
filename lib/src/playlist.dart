@@ -8,10 +8,10 @@ class Playlist {
 
     final Iterable<String> soundNames;
 
-    String currentSoundName;
-    AudioBufferSourceNode currentSound;
+    String? currentSoundName;
+    AudioBufferSourceNode? currentSound;
 
-    Iterator<String> _iterator;
+    late Iterator<String> _iterator;
     bool _playing = false;
     bool loop = false;
 
@@ -31,16 +31,16 @@ class Playlist {
             final String name = _iterator.current;
 
             currentSound = await _makeBufferSource(name);
-            currentSound.connectNode(output);
+            currentSound!.connectNode(output);
             _playing = true;
             if (iter || loop) {
-                currentSound.onEnded.listen((Event e) {
+                currentSound!.onEnded.listen((Event e) {
                     if (_playing) {
                         play();
                     }
                 });
             }
-            currentSound.start(0);
+            currentSound!.start(0);
 
         } else {
             stop();
@@ -50,7 +50,7 @@ class Playlist {
 
     void stop() {
         if (currentSound != null) {
-            currentSound.stop();
+            currentSound!.stop();
         }
         _playing = false;
     }
